@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    base(href="https://antone.dev/los/")
+    link(rel="stylesheet" href="los/index.css")
+    link(rel="stylesheet" href="https://use.typekit.net/klx0slv.css")
+    title Login - Length Of Stay
+  body
+    header
+      h1 LENGTH OF STAY
+    main
+      .card Please enter the code to continue.
+        form.form(action="los/login" method="post")
+          label
+            if error
+              span.orange #{error}
+            else
+              span CODE
+            input(type="password" name="pin" placeholder="PIN Code" pattern="[0-9]*" inputmode="numeric" autocomplete="off", required)
+          input.button(type="submit")

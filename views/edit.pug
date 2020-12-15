@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    base(href="https://antone.dev/los/")
+    link(rel="stylesheet" href="los/index.css")
+    link(rel="stylesheet" href="https://use.typekit.net/klx0slv.css")
+    title Edit - Length Of Stay
+  body
+    header
+      h1 LENGTH OF STAY
+    main
+      form.form(action="los/update" method="post" autocomplete="off")
+        input(type="hidden" name="_id", value=animal._id)
+        label NAME
+          input(type="text" name="name" maxlength="12" value=animal.name, required)
+        label ID #
+          input(type="text" name="id" maxlength="8" value=animal.id, required)
+        label SPECIES
+          select(name="species", required)
+            if animal.species === "Dog" 
+              option(value="Cat") Cat
+              option(value="Dog" selected) Dog
+              option(value="Other") Other
+            else if animal.species === "Cat"
+              option(value="Cat" selected) Cat
+              option(value="Dog") Dog
+              option(value="Other") Other
+            else
+              option(value="Cat") Cat
+              option(value="Dog") Dog
+              option(value="Other" selected) Other
+        label DATE
+          input(type="date" name="date-of-entry", value=animal.dateOfEntry, required)
+        if animal.inFoster
+          input(type="hidden" name="inFoster" value="true")
+        if animal.inFoster || animal.fosterDate
+          label FOSTER DATE
+            input(type="date" name="fosterDate", value=animal.fosterDate)
+        if animal.fosterDate && !animal.inFoster
+          label RETURN DATE
+            input(type="date" name="returnDate", value=animal.returnDate)
+        label SHELTER
+          select(name="shelter", required)
+            if animal.shelter === "PA"
+              option(value="PA" selected) Palo Alto (PA)
+              option(value="RWC") Redwood City (RWC)
+            else
+              option(value="PA") Palo Alto (PA)
+              option(value="RWC" selected) Redwood City (RWC)
+        label AREA
+          select(name="area", required)
+            if animal.area === "F" 
+              option(value="F" selected) Shelter Floor (F)
+              option(value="Q") Quarantine (Q)
+            else
+              option(value="F") Shelter Floor (F)
+              option(value="Q" selected) Quarantine (Q)
+        label NOTE
+          textarea(name="notes" cols="30" rows="10")= animal.notes
+        .button-wrapper
+          input.button(type="submit")
+          input.button(type="button" onclick="window.history.back()" value="Cancel")

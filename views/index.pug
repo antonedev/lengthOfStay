@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    base(href="https://antone.dev/los")
+    link(rel="stylesheet" href="los/index.css")
+    link(rel="stylesheet" href="https://use.typekit.net/klx0slv.css")
+    title Length Of Stay
+  body#body
+    #page
+      header#head
+        h1 LENGTH OF STAY
+      main
+        form#input-form.form(action="los/create" method="post" autocomplete="off")
+          label NAME
+            input(type="text" name="name" maxlength="12" placeholder="Animal's name", required)
+          label ID # 
+            input(type="text" name="id" maxlength="8" placeholder="Animal's ID number", required)
+          label SPECIES
+            select(name="species", required)
+              option(value="", disabled hidden selected) Select one... 
+              option(value="Cat") Cat
+              option(value="Dog") Dog
+              option(value="Other") Other
+          label DATE
+            input(type="date" name="date-of-entry", value=today, required)
+          label SHELTER
+            select(name="shelter", required)
+              option(value="", disabled hidden selected) Select one... 
+              option(value="PA") Palo Alto (PA)
+              option(value="RWC") Redwood City (RWC)
+          label AREA
+            select(name="area", required)
+              option(value="", disabled, hidden, selected) Select one... 
+              option(value="F") Shelter Floor (F)
+              option(value="Q") Quarantine (Q)
+          label NOTE
+            textarea(name="notes" cols="30" rows="10")
+          input.button(type="submit")
+          hr#hr
+        #toggle-wrapper
+          input#first-shelter.toggle(type="button" value="Show RWC First")
+          input#form-visibility.toggle(type="button" value="Show Input Form")
+        #list-wrapper
+          #list-header
+            #header-name NAME
+            #header-los LOS
+            #header-date SPECIES
+            #headter-shelter SHELTER
+          #pa-list.list
+            each val, key in allAnimals
+              if val.shelter === "PA"
+                details(class=val.inFoster)
+                  summary(class=val.shelter + ' ' + val.area)
+                    .status-bar
+                      .status.name= val.name
+                      if val.lengthOfStay < 7
+                        .status.green= val.lengthOfStay
+                      else if val.lengthOfStay < 14
+                        .status.orange= val.lengthOfStay
+                      else
+                        .status.red= val.lengthOfStay
+                      .status=val.species
+                      .status=val.shelter
+                  div.detail
+                    .left-panel
+                      .info-display
+                        if val.returnDate
+                          .returnDate.info RETURN DATE: #{val.returnDate}
+                        if val.fosterDate
+                          .fosterDate.info FOSTER DATE: #{val.fosterDate}
+                        .inDate.info IN DATE: #{val.dateOfEntry}
+                        .id.info ID: #{val.id}
+                        .shelter.info SHELTER: #{val.shelter}
+                        .area.info AREA: #{val.area}
+                        if val.inFoster
+                          .inFoster.info IN FOSTER
+                      if val.notes
+                        p NOTES: #{val.notes}
+                      else 
+                        p NOTES: [empty]
+                    .icons
+                      form(action="los/delete" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        input.delete.icon(type="image" src="los/delete.svg" alt="delete this record")
+                      form(action="los/edit" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        input.icon(type="image" src="los/edit.svg" alt="edit this record")
+                      form(action="los/foster" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        if val.inFoster
+                          input(type="hidden" name="inFoster" value="true")
+                        input.icon(type="image" src="los/home.svg" alt="change this record's in-foster status")
+          hr#divider
+          #rwc-list.list
+            each val, key in allAnimals
+              if val.shelter === "RWC"
+                details(class=val.inFoster)
+                  summary(class=val.shelter + ' ' + val.area)
+                    .status-bar
+                      .status.name= val.name
+                      if val.lengthOfStay < 7
+                        .status.green= val.lengthOfStay
+                      else if val.lengthOfStay < 14
+                        .status.orange= val.lengthOfStay
+                      else
+                        .status.red= val.lengthOfStay
+                      .status=val.species
+                      .status=val.shelter
+                  div.detail
+                    .left-panel
+                      .info-display
+                        if val.returnDate
+                          .returnDate.info RETURN DATE: #{val.returnDate}
+                        if val.fosterDate
+                          .fosterDate.info FOSTER DATE: #{val.fosterDate}
+                        .inDate.info IN DATE: #{val.dateOfEntry}
+                        .id.info ID: #{val.id}
+                        .shelter.info SHELTER: #{val.shelter}
+                        .area.info AREA: #{val.area}
+                        if val.inFoster
+                          .inFoster.info IN FOSTER
+                      if val.notes
+                        p NOTES: #{val.notes}
+                      else 
+                        p NOTES: none        
+                    .icons
+                      form(action="los/delete" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        input.icon(type="image" src="los/delete.svg" alt="delete this record")
+                      form(action="los/edit" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        input.icon(type="image" src="los/edit.svg" alt="edit this record")
+                      form(action="los/foster" method="post")
+                        input(type="hidden" name="id", value=val._id)
+                        if val.inFoster
+                          input(type="hidden" name="inFoster" value="true")
+                        input.icon(type="image" src="los/home.svg" alt="change this record to in-foster")
+    script(src="los/index.js")
